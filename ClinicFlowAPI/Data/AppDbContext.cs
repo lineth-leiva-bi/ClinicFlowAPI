@@ -12,5 +12,7 @@ namespace ClinicFlowAPI.Data
         }
 
         public DbSet<Cliente> Clientes { get; set; }
+
+        public DbSet<Cita> Citas { get; set; }
     }
 }
