@@ -36,11 +36,30 @@ namespace ClinicFlowAPI.Controllers
         [HttpPost]
         public IActionResult CrearCliente([FromBody] Cliente cliente)
         {
+
+            //validar que el objeto no este vacío
+            if (cliente == null)
+                return BadRequest( "El cliente es requerido" );
+
+            //valida obligatorias
+            if (string.IsNullOrWhiteSpace(cliente.Nombre))
+                return BadRequest("El nombre es obligatorio");
+
+            if (string.IsNullOrWhiteSpace(cliente.PrimerApellido))
+                return BadRequest("El primer apellido es obligatorio");
+
+            if (string.IsNullOrWhiteSpace(cliente.Nombre))
+                return BadRequest("El segundo apellido es obligatorio");
+
+            if (string.IsNullOrWhiteSpace(cliente.Email))
+                return BadRequest("El correo electrónico es obligatorio");
+
             cliente.Id = clientes.Count + 1;
 
             clientes.Add(cliente);
 
-            return Ok(cliente);
+            //retorna 201 
+            return CreatedAtAction(nameof(ObtenerClientes), new {id = cliente.Id}, cliente);
         }
     }
 }
