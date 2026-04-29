@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ClinicFlowAPI.Models;
+using ClinicFlowAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClinicFlowAPI.Controllers
 {
@@ -12,54 +14,68 @@ namespace ClinicFlowAPI.Controllers
     public class ClientesController : ControllerBase
     {
 
-        private static List<Cliente> clientes = new List<Cliente>
+        //conexión a la BD
+        private readonly AppDbContext _context;
+
+        public ClientesController(AppDbContext context)
         {
-            new Cliente
-            {
-                Id = 1,
-                Nombre = "Jacqueline",
-                PrimerApellido = "Vargas",
-                SegundoApellido = "Mora",
-                Email = "jacqueline@gmail.com",
-                Telefono = "8888-1111"
-            }
-        };
+            _context = context;
+        }
 
         /// Obtiene la lista completa de clientes registrados.
         [HttpGet]
-        public IActionResult ObtenerClientes()
+        public async Task<IActionResult> ObtenerClientes()
         {
+            var clientes = await _context.Clientes.ToListAsync();
             return Ok(clientes);
         }
 
         /// Registra un nuevo cliente en la lista.
         [HttpPost]
-        public IActionResult CrearCliente([FromBody] Cliente cliente)
+        public async Task<IActionResult> CrearCliente([FromBody] Cliente cliente)
         {
+            _context.Clientes.Add(cliente);
+            await _context.SaveChangesAsync();
 
-            //validar que el objeto no este vacío
+            return Ok(cliente);
+        }
+
+        /// Actualiza la información de un cliente existente.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ActualizarCliente(int id, [FromBody] Cliente clienteActualizado)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var cliente = await _context.Clientes.FindAsync(id);
+
             if (cliente == null)
-                return BadRequest( "El cliente es requerido" );
+                return NotFound("Cliente no encontrado.");
 
-            //valida obligatorias
-            if (string.IsNullOrWhiteSpace(cliente.Nombre))
-                return BadRequest("El nombre es obligatorio");
+            cliente.Nombre = clienteActualizado.Nombre;
+            cliente.PrimerApellido = clienteActualizado.PrimerApellido;
+            cliente.SegundoApellido = clienteActualizado.SegundoApellido;
+            cliente.Email = clienteActualizado.Email;
+            cliente.Telefono = clienteActualizado.Telefono;
 
-            if (string.IsNullOrWhiteSpace(cliente.PrimerApellido))
-                return BadRequest("El primer apellido es obligatorio");
+            await _context.SaveChangesAsync();
 
-            if (string.IsNullOrWhiteSpace(cliente.Nombre))
-                return BadRequest("El segundo apellido es obligatorio");
+            return Ok(cliente);
+        }
 
-            if (string.IsNullOrWhiteSpace(cliente.Email))
-                return BadRequest("El correo electrónico es obligatorio");
+        /// Elimina un cliente existente según el Id
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> EliminarCliente(int id)
+        {
+            var cliente = await _context.Clientes.FindAsync(id);
 
-            cliente.Id = clientes.Count + 1;
+            if (cliente == null)
+                return NotFound("Cliente no encontrado.");
 
-            clientes.Add(cliente);
+            _context.Clientes.Remove(cliente);
+            await _context.SaveChangesAsync();
 
-            //retorna 201 
-            return CreatedAtAction(nameof(ObtenerClientes), new {id = cliente.Id}, cliente);
+            return NoContent();
         }
     }
 }
