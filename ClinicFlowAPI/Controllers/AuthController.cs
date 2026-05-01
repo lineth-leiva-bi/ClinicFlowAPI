@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using ClinicFlowAPI.Data;
 using ClinicFlowAPI.Models;
 using ClinicFlowAPI.DTOs;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ClinicFlowAPI.Controllers
 {
@@ -17,9 +21,13 @@ namespace ClinicFlowAPI.Controllers
         //conexión a la BD
         private readonly AppDbContext _context;
 
-        public AuthController(AppDbContext context )
+        //conexión con el token 
+        private readonly IConfiguration _configuration;
+
+        public AuthController(AppDbContext context,IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost("registrar")]
@@ -54,7 +62,41 @@ namespace ClinicFlowAPI.Controllers
             if (!valido)
                 return Unauthorized("Contraseña incorrecta");
 
-            return Ok("Login exitoso");
+            var token = GenerarToken(usuarioactualizado);
+
+            return Ok(new
+            {
+                mensaje = "Login exitoso",
+                token = token
+            });
+        }
+
+        //metodo que genera el token 
+        private string GenerarToken(Usuario usuario)
+        {
+            var claims = new[]
+            {
+        new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+        new Claim(ClaimTypes.Name, usuario.usuario),
+        new Claim(ClaimTypes.Role, usuario.rol),
+        new Claim("ClienteId", usuario.ClienteId?.ToString() ?? "")
+            };
+
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)
+            );
+
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(2),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 
