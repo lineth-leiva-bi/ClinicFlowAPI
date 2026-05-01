@@ -11,7 +11,7 @@ API REST desarrollada en C# con ASP.NET Core para la gestión de clientes y clie
 -Consulta de citas propias 
 -CRUD Clientes
 
-##Seguridad 
+## Seguridad 
 -Uso de autenticación basada en tokens JWT
 -Control de acceso a endpoints protegidos 
 -Asociación de credenciales con hashing de contraseñas 
