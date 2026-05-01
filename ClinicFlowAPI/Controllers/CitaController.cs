@@ -67,5 +67,28 @@ namespace ClinicFlowAPI.Controllers
             return Ok(cita);
         }
 
+        // Obtener solo las citas del cliente logueado
+        [HttpGet("Mis Citas")]
+        public async Task<IActionResult> ObtenerCitasPorUsuario()
+        {
+            var clienteIdToken = User.FindFirst("ClienteId")?.Value;
+
+            if (string.IsNullOrEmpty(clienteIdToken))
+                return Unauthorized("Token sin ClienteId");
+
+            if (!int.TryParse(clienteIdToken, out int clienteId))
+                return Unauthorized("ClienteId inválido en el token");
+
+            if (clienteId == 0)
+                return Unauthorized("El usuario no tiene un cliente asociado");
+
+            var citas = await _context.Citas
+                .Where(c => c.ClienteId == clienteId)
+                .OrderBy(c => c.FechaHora)
+                .ToListAsync();
+
+            return Ok(citas);
+        }
+
     }
 }

@@ -30,7 +30,7 @@ namespace ClinicFlowAPI.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("registrar")]
+        [HttpPost("Registrarme")]
         public async Task<IActionResult> Registrar(Usuario usuario)
         {
             var passwordService = new SeguridadContrasenna();
@@ -43,7 +43,7 @@ namespace ClinicFlowAPI.Controllers
             return Ok("Usuario registrado"); 
         }
 
-        [HttpPost("inicio")]
+        [HttpPost("Iniciar Sesión")]
         public async Task<IActionResult> Inicio([FromBody] InicioDto inicio)
         {
             var usuarioactualizado = await _context.Usuarios
