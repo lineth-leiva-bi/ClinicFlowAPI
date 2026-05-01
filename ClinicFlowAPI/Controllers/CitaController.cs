@@ -3,9 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using ClinicFlowAPI.Data;
 using ClinicFlowAPI.Models;
 using ClinicFlowAPI.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicFlowAPI.Controllers
 {
+
+    [Authorize]
+
     //convierte la clase en API
     [ApiController]
 
@@ -24,22 +28,33 @@ namespace ClinicFlowAPI.Controllers
 
         }
 
-        //Crear cita, validando que los datos sean correctos y crea la cita 
+        //Crear cita, validando que los datos sean correctos y crea la cita mientras que valida con token 
         [HttpPost]
         public async Task<IActionResult> CrearCita([FromBody] CrearCitaDto citaDto)
         {
+            var clienteIdToken = User.FindFirst("ClienteId")?.Value;
+
+            if (string.IsNullOrEmpty(clienteIdToken))
+                return Unauthorized("Token sin ClienteId");
+
+            if (!int.TryParse(clienteIdToken, out int clienteId))
+                return Unauthorized("ClienteId inválido en el token");
+
+            if (clienteId == 0)
+                return Unauthorized("El usuario no tiene un cliente asociado");
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var clienteExiste = await _context.Clientes
-                .AnyAsync(c => c.Id == citaDto.ClienteId);
+                .AnyAsync(c => c.Id == clienteId);
 
             if (!clienteExiste)
                 return BadRequest("El cliente no existe.");
 
             var cita = new Cita
             {
-                ClienteId = citaDto.ClienteId,
+                ClienteId = clienteId,
                 FechaHora = citaDto.FechaHora,
                 Motivo = citaDto.Motivo,
                 Estado = citaDto.Estado,
