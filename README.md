@@ -1,24 +1,38 @@
 # ClinicFlow API
 
-API REST desarrollada en C# con ASP.NET Core para la gestión de clientes.
+API REST desarrollada en C# con ASP.NET Core para la gestión de clientes y clientes en un sistema clínico.
 
-## Funcionalidades
+## Funcionalidades principales
 
-- Obtener clientes (GET)
-- Crear clientes (POST)
-- Actualizar clientes (PUT)
-- Eliminar clientes (DELETE)
+-Registro e inicio de sesión de usuarios 
+-Autenticación mediante JWT (JSON Web Token)
+-Pretección de endpoints con Authorize
+-Creación de citas asociadas al usuario autenticado
+-Consulta de citas propias 
+-CRUD Clientes
+
+##Seguridad 
+-Uso de autenticación basada en tokens JWT
+-Control de acceso a endpoints protegidos 
+-Asociación de credenciales con hashing de contraseñas 
 
 ## Tecnologías
 
-- C#
-- ASP.NET Core
-- Swagger
+-C#
+-ASP.NET Core
+-SQL Server
+-Swagger (pruebas)
+-JWT (autenticación) 
 
 ## Estado del proyecto
 
-En desarrollo como parte de portafolio profesional.
+En desarrollo como parte de portafolio profesional, enfocado en buenas prácticas de backend y seguridad.
 
 ## Objetivo
 
-Demostrar habilidades en desarrollo backend, APIs REST y manejo de datos.
+Demostrar habilidades en:
+
+-Desarrollo de APIs REST 
+-Implementación de autenticación y autorización 
+-Manejo de datos con Entity Framework 
+-Aplicación de principios de seguridad y backend 
