@@ -7,47 +7,43 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicFlowAPI.Controllers
 {
-
     [Authorize]
-
-    //convierte la clase en API
     [ApiController]
-
-    //cuando ingresen a api cita ejecute este controller
     [Route("api/[controller]")]
-
     public class CitaController : ControllerBase
     {
-
-        //conexión a la BD
         private readonly AppDbContext _context;
 
-        public CitaController(AppDbContext context) {   
-
+        public CitaController(AppDbContext context)
+        {
             _context = context;
-
         }
 
-        //Crear cita, validando que los datos sean correctos y crea la cita mientras que valida con token 
-        [HttpPost]
-        public async Task<IActionResult> CrearCita([FromBody] CrearCitaDto citaDto)
+        private bool ObtenerClienteId(out int clienteId)
         {
+            clienteId = 0;
+
             var clienteIdToken = User.FindFirst("ClienteId")?.Value;
 
             if (string.IsNullOrEmpty(clienteIdToken))
-                return Unauthorized("Token sin ClienteId");
+                return false;
 
-            if (!int.TryParse(clienteIdToken, out int clienteId))
-                return Unauthorized("ClienteId inválido en el token");
+            if (!int.TryParse(clienteIdToken, out clienteId))
+                return false;
 
-            if (clienteId == 0)
-                return Unauthorized("El usuario no tiene un cliente asociado");
+            return clienteId > 0;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CrearCita([FromBody] CrearCitaDto citaDto)
+        {
+            if (!ObtenerClienteId(out int clienteId))
+                return Unauthorized("El usuario no tiene un cliente asociado.");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var clienteExiste = await _context.Clientes
-                .AnyAsync(c => c.Id == clienteId);
+            var clienteExiste = await _context.Clientes.AnyAsync(c => c.Id == clienteId);
 
             if (!clienteExiste)
                 return BadRequest("El cliente no existe.");
@@ -57,7 +53,7 @@ namespace ClinicFlowAPI.Controllers
                 ClienteId = clienteId,
                 FechaHora = citaDto.FechaHora,
                 Motivo = citaDto.Motivo,
-                Estado = citaDto.Estado,
+                Estado = string.IsNullOrWhiteSpace(citaDto.Estado) ? "Pendiente" : citaDto.Estado,
                 Observaciones = citaDto.Observaciones
             };
 
@@ -67,20 +63,11 @@ namespace ClinicFlowAPI.Controllers
             return Ok(cita);
         }
 
-        // Obtener solo las citas del cliente logueado
-        [HttpGet("Mis Citas")]
-        public async Task<IActionResult> ObtenerCitasPorUsuario()
+        [HttpGet("mis-citas")]
+        public async Task<IActionResult> ObtenerMisCitas()
         {
-            var clienteIdToken = User.FindFirst("ClienteId")?.Value;
-
-            if (string.IsNullOrEmpty(clienteIdToken))
-                return Unauthorized("Token sin ClienteId");
-
-            if (!int.TryParse(clienteIdToken, out int clienteId))
-                return Unauthorized("ClienteId inválido en el token");
-
-            if (clienteId == 0)
-                return Unauthorized("El usuario no tiene un cliente asociado");
+            if (!ObtenerClienteId(out int clienteId))
+                return Unauthorized("El usuario no tiene un cliente asociado.");
 
             var citas = await _context.Citas
                 .Where(c => c.ClienteId == clienteId)
@@ -90,5 +77,81 @@ namespace ClinicFlowAPI.Controllers
             return Ok(citas);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ObtenerCitaPorId(int id)
+        {
+            if (!ObtenerClienteId(out int clienteId))
+                return Unauthorized("El usuario no tiene un cliente asociado.");
+
+            var cita = await _context.Citas
+                .FirstOrDefaultAsync(c => c.Id == id && c.ClienteId == clienteId);
+
+            if (cita == null)
+                return NotFound("Cita no encontrada.");
+
+            return Ok(cita);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ActualizarCita(int id, [FromBody] CrearCitaDto citaDto)
+        {
+            if (!ObtenerClienteId(out int clienteId))
+                return Unauthorized("El usuario no tiene un cliente asociado.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var cita = await _context.Citas
+                .FirstOrDefaultAsync(c => c.Id == id && c.ClienteId == clienteId);
+
+            if (cita == null)
+                return NotFound("Cita no encontrada.");
+
+            cita.FechaHora = citaDto.FechaHora;
+            cita.Motivo = citaDto.Motivo;
+            cita.Estado = string.IsNullOrWhiteSpace(citaDto.Estado) ? cita.Estado : citaDto.Estado;
+            cita.Observaciones = citaDto.Observaciones;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(cita);
+        }
+
+        [HttpPatch("{id}/cancelar")]
+        public async Task<IActionResult> CancelarCita(int id)
+        {
+            if (!ObtenerClienteId(out int clienteId))
+                return Unauthorized("El usuario no tiene un cliente asociado.");
+
+            var cita = await _context.Citas
+                .FirstOrDefaultAsync(c => c.Id == id && c.ClienteId == clienteId);
+
+            if (cita == null)
+                return NotFound("Cita no encontrada.");
+
+            cita.Estado = "Cancelada";
+
+            await _context.SaveChangesAsync();
+
+            return Ok(cita);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> EliminarCita(int id)
+        {
+            if (!ObtenerClienteId(out int clienteId))
+                return Unauthorized("El usuario no tiene un cliente asociado.");
+
+            var cita = await _context.Citas
+                .FirstOrDefaultAsync(c => c.Id == id && c.ClienteId == clienteId);
+
+            if (cita == null)
+                return NotFound("Cita no encontrada.");
+
+            _context.Citas.Remove(cita);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
