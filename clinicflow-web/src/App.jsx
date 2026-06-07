@@ -1,10 +1,7 @@
+import Login from "./pages/Login";
+
 function App() {
-  return (
-    <div>
-      <h1>ClinicFlow</h1>
-      <p>Frontend conectado con React</p>
-    </div>
-  );
+  return <Login />;
 }
 
 export default App;
