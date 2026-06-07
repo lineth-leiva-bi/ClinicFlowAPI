@@ -2,10 +2,15 @@ import { useState } from "react";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
 import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
 
 function App() {
 
-  const [pantalla, setPantalla] = useState("login");
+  const [pantalla, setPantalla] = useState("home");
+
+  if (pantalla === "home") {
+  return <Home onLogin={() => setPantalla("login")} />;
+  }
 
   if (pantalla === "dashboard") {
     return <Dashboard onLogout={() => setPantalla("login")} />;

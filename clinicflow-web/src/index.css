@@ -55,15 +55,16 @@ body {
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   text-align: center;
   border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  padding: 0;
 }
 
 h1,
@@ -108,4 +109,124 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+/* HOME */
+.home {
+  width: 100%;
+  min-height: 100vh;
+  color: white;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.78), rgba(30, 58, 138, 0.75)),
+    url("/clinic-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.navbar {
+  height: 72px;
+  padding: 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.navbar h2 {
+  font-size: 28px;
+  margin: 0;
+  color: white;
+}
+
+.navbar button,
+.hero button {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.hero {
+  padding: 110px 90px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.hero > div:first-child {
+  text-align: left;
+  max-width: 760px;
+}
+
+.hero h1 {
+  font-size: 58px;
+  line-height: 1.08;
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s ease;
+}
+
+.hero p {
+  font-size: 21px;
+  line-height: 1.6;
+  color: #dbeafe;
+  max-width: 680px;
+  margin-bottom: 32px;
+  animation: fadeUp 1s ease;
+}
+
+.hero-card {
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+  padding: 42px;
+  border-radius: 26px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  animation: floatCard 4s ease-in-out infinite;
+}
+
+.hero-card h3 {
+  font-size: 30px;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.hero-card p {
+  color: #e0ecff;
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
+.hero button {
+  margin-top: 8px;
+  animation: fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }

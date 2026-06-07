@@ -72,6 +72,27 @@ function Clientes() {
     cargarClientes();
   };
 
+  const eliminarCliente = async (id) => {
+  const confirmar = confirm("¿Seguro que deseas eliminar este cliente?");
+
+  if (!confirmar) {
+    return;
+  }
+
+  const respuesta = await fetch(`${API_URL}/Clientes/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!respuesta.ok) {
+    const data = await respuesta.text();
+    alert(data);
+    return;
+  }
+
+  alert("Cliente eliminado correctamente");
+  cargarClientes();
+};
+
   useEffect(() => {
     const obtenerClientes = async () => {
       await cargarClientes();
@@ -153,6 +174,9 @@ function Clientes() {
                 <td>
                   <button onClick={() => seleccionarCliente(cliente)}>
                     Editar
+                  </button>
+                    <button onClick={() => eliminarCliente(cliente.id)}>
+                    Eliminar
                   </button>
                 </td>
               </tr>

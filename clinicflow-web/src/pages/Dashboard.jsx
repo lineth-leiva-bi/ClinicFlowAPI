@@ -7,7 +7,7 @@ function Dashboard({ onLogout }) {
 
   return (
     <div>
-      <h1>🏥 ClinicFlow</h1>
+      <h1>ClinicFlow</h1>
 
       <hr />
 
