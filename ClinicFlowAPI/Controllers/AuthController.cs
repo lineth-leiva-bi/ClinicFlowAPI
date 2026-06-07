@@ -43,7 +43,7 @@ namespace ClinicFlowAPI.Controllers
             return Ok("Usuario registrado"); 
         }
 
-        [HttpPost("Iniciar Sesión")]
+        [HttpPost("login")]
         public async Task<IActionResult> Inicio([FromBody] InicioDto inicio)
         {
             var usuarioactualizado = await _context.Usuarios
