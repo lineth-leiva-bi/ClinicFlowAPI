@@ -1,47 +1,49 @@
 import { useState } from "react";
 import API_URL from "../services/api";
 
-function Login({ onLogin }) {
+function Registro() {
+  const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
 
-  const iniciarSesion = async (e) => {
+  const registrarUsuario = async (e) => {
     e.preventDefault();
 
-    const respuesta = await fetch(`${API_URL}/Auth/login`, {
+    const respuesta = await fetch(`${API_URL}/Auth/Registrarme`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        nombre,
         correo,
         contrasena,
       }),
     });
 
-const data = await respuesta.text();
+    const data = await respuesta.text();
+    console.log(data);
 
-if (!respuesta.ok) {
-  alert(data);
-  return;
-}
+    if (!respuesta.ok) {
+      alert(data);
+      return;
+    }
 
-localStorage.setItem("token", data);
-
-alert("Inicio de sesión correcto");
-onLogin();
-
-alert("Inicio de sesión correcto");
-onLogin();
-
-alert("Inicio de sesión correcto");
+    alert("Usuario registrado correctamente");
   };
 
   return (
     <div>
-      <h2>Iniciar sesión</h2>
+      <h2>Registrarme</h2>
 
-      <form onSubmit={iniciarSesion}>
+      <form onSubmit={registrarUsuario}>
+        <input
+          type="text"
+          placeholder="Nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
+
         <input
           type="email"
           placeholder="Correo electrónico"
@@ -56,10 +58,10 @@ alert("Inicio de sesión correcto");
           onChange={(e) => setContrasena(e.target.value)}
         />
 
-        <button type="submit">Ingresar</button>
+        <button type="submit">Registrarme</button>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default Registro;
