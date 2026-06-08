@@ -1,4 +1,7 @@
 import { Users, CalendarDays, LayoutDashboard } from "lucide-react";
+import { FaReact, FaDatabase, FaLock } from "react-icons/fa";
+import { SiDotnet } from "react-icons/si";
+import Carousel from "../components/Carousel";
 
 function Home({ onLogin }) {
   return (
@@ -36,7 +39,7 @@ function Home({ onLogin }) {
       </section>
 
       <section className="info-section">
-  <h2>Organiza la atención de tus pacientes desde un solo lugar</h2>
+  <h2>Todo lo que tu clínica necesita en una sola plataforma</h2>
 
   <div className="info-grid">
     <div className="info-card">
@@ -66,11 +69,83 @@ function Home({ onLogin }) {
   </p>
 </div>
   </div>
+
 </section>
 
-<p className="subtitle">
-Conoce las principales herramientas que facilitan la gestión diaria de la clínica.
+<Carousel />
+
+<section className="tech-section">
+  <h2>Tecnologías utilizadas</h2>
+
+    <p className="tech-description">
+  Desarrollado con tecnologías modernas para construir una aplicación web
+  segura, conectada y fácil de mantener.
 </p>
+
+  <div className="tech-grid">
+    <div className="tech-card">
+      <FaReact className="tech-icon" />
+      <span>React</span>
+    </div>
+
+    <div className="tech-card">
+      <SiDotnet className="tech-icon" />
+      <span>ASP.NET Core</span>
+    </div>
+
+    <div className="tech-card">
+      <FaDatabase className="tech-icon" />
+      <span>SQL Server</span>
+    </div>
+
+    <div className="tech-card">
+      <FaDatabase className="tech-icon" />
+      <span>Entity Framework</span>
+    </div>
+
+    <div className="tech-card">
+      <FaLock className="tech-icon" />
+      <span>Autenticación</span>
+    </div>
+  </div>
+</section>
+
+<footer className="footer">
+  <div>
+    <h2>ClinicFlow</h2>
+    <p>Sistema de gestión clínica desarrollado como proyecto de portafolio.</p>
+  </div>
+
+  <div>
+    <h3>Desarrollado por</h3>
+    <p>Lineth Leiva</p>
+    <p>Ingeniería en Sistemas de Información</p>
+  </div>
+
+  <div>
+  <h3>Contacto</h3>
+
+  <a href="mailto:linethleivacr@gmail.com">
+    📧 linethleivacr@gmail.com
+  </a>
+
+  <a
+    href="https://github.com/lineth-leiva-bi"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    💻 GitHub: lineth-leiva-bi
+  </a>
+
+  <a
+    href="https://www.linkedin.com/in/lineth-leiva-vargas/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    🔗 LinkedIn
+  </a>
+</div>
+</footer>
 
 </div>
   );
