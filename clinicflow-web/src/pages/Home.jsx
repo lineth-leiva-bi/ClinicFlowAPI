@@ -1,3 +1,5 @@
+import { Users, CalendarDays, LayoutDashboard } from "lucide-react";
+
 function Home({ onLogin }) {
   return (
     <div className="home">
@@ -32,7 +34,45 @@ function Home({ onLogin }) {
           <p>✔ Panel administrativo</p>
         </div>
       </section>
-    </div>
+
+      <section className="info-section">
+  <h2>Organiza la atención de tus pacientes desde un solo lugar</h2>
+
+  <div className="info-grid">
+    <div className="info-card">
+  <Users className="info-icon" />
+  <h3>Clientes</h3>
+  <p>
+    Registra, consulta, actualiza y elimina información de clientes de forma
+    rápida y organizada.
+  </p>
+</div>
+
+<div className="info-card">
+  <CalendarDays className="info-icon" />
+  <h3>Citas</h3>
+  <p>
+    Administra las citas de la clínica y mejora la organización diaria del
+    personal.
+  </p>
+</div>
+
+<div className="info-card">
+  <LayoutDashboard className="info-icon" />
+  <h3>Panel administrativo</h3>
+  <p>
+    Accede a una vista centralizada para gestionar los módulos principales del
+    sistema.
+  </p>
+</div>
+  </div>
+</section>
+
+<p className="subtitle">
+Conoce las principales herramientas que facilitan la gestión diaria de la clínica.
+</p>
+
+</div>
   );
 }
 
