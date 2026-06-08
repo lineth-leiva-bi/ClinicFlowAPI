@@ -7,6 +7,11 @@ function Home({ onLogin }) {
   return (
     <div className="home">
       <nav className="navbar">
+        <div className="logo-container">
+        <img src="/logo.png" alt="ClinicFlow" />
+        <span>ClinicFlow</span>
+        </div>
+        
         <h2>ClinicFlow</h2>
 
         <button onClick={onLogin}>
@@ -142,7 +147,7 @@ function Home({ onLogin }) {
     target="_blank"
     rel="noopener noreferrer"
   >
-    🔗 LinkedIn
+    🔗 Perfil de LinkedIn
   </a>
 </div>
 </footer>

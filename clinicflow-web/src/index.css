@@ -117,10 +117,14 @@ code {
   min-height: 100vh;
   color: white;
   background-image:
-    linear-gradient(rgba(15, 23, 42, 0.78), rgba(30, 58, 138, 0.75)),
+    linear-gradient(
+      rgba(15, 23, 42, 0.78),
+      rgba(30, 58, 138, 0.75)
+    ),
     url("/clinic-bg.jpg");
-  background-size: cover;
-  background-position: center;
+
+  background-size: 100% auto;
+  background-position: center top;
   background-repeat: no-repeat;
 }
 
@@ -516,4 +520,123 @@ code {
 .footer a:hover {
   color: #38bdf8;
   transform: translateX(5px);
+}
+
+/* LOGIN */
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.82), rgba(30, 58, 138, 0.78)),
+    url("/clinic-inicio.jpg");
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.auth-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px;
+  text-align: left;
+}
+
+.auth-info h1 {
+  color: white;
+  font-size: 58px;
+  margin-bottom: 20px;
+}
+
+.auth-info p {
+  color: #dbeafe;
+  font-size: 22px;
+  line-height: 1.6;
+  max-width: 620px;
+}
+
+.auth-card {
+  margin: auto;
+  width: 400px;
+  padding: 35px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.35);
+}
+
+.auth-card h2 {
+  color: white;
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  color: #dbeafe;
+  margin-bottom: 28px;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-card input {
+  padding: 15px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  outline: none;
+}
+
+.auth-card input::placeholder {
+  color: #cbd5e1;
+}
+
+.auth-card button {
+  margin-top: 10px;
+  border: none;
+  padding: 15px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.35);
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.auth-card button:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.08);
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 18px;
+  color: #dbeafe;
+}
+
+.register-link span {
+  color: #38bdf8;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* LOGO */
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-container img {
+  width: 42px;
+  height: 42px;
 }

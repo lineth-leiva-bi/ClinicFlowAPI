@@ -28,13 +28,12 @@ function App() {
   }
 
   return (
-    <>
-      <Login onLogin={() => setPantalla("dashboard")} />
-      <button onClick={() => setPantalla("registro")}>
-        Registrarme
-      </button>
-    </>
-  );
+  <Login
+    onLogin={() => setPantalla("dashboard")}
+    onRegistro={() => setPantalla("registro")}
+    onHome={() => setPantalla("home")}
+  />
+);
 }
 
 export default App;
