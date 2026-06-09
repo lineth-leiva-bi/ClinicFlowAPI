@@ -1,7 +1,7 @@
 import { useState } from "react";
 import API_URL from "../services/api";
 
-function Login({ onLogin , onRegistro , onhome }) {
+function Login({ onLogin , onRegistro , onHome }) {
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
 
@@ -31,7 +31,6 @@ localStorage.setItem("token", data);
 alert("Inicio de sesión correcto");
 onLogin();
 
-alert("Inicio de sesión correcto");
   };
 
   return (
@@ -39,13 +38,11 @@ alert("Inicio de sesión correcto");
     <div className="login">
       <nav className="navbar">
         <div className="logo-container">
-        <img src="/logo.png" alt="ClinicFlow" />
+        <img src="/logo1.png" alt="ClinicFlow" />
         <span>ClinicFlow</span>
         </div>
-        
-        <h2>ClinicFlow</h2>
 
-        <button onClick={onhome}>
+        <button onClick={onHome}>
           Inicio
         </button>
       </nav>  

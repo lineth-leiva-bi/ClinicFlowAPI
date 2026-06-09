@@ -118,8 +118,8 @@ code {
   color: white;
   background-image:
     linear-gradient(
-      rgba(15, 23, 42, 0.78),
-      rgba(30, 58, 138, 0.75)
+      rgba(15, 23, 42, 0.85),
+      rgba(30, 58, 138, 0.82)
     ),
     url("/clinic-bg.jpg");
 
@@ -136,7 +136,7 @@ code {
   justify-content: space-between;
 
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
 
   border-bottom: 1px solid rgba(255,255,255,0.15);
 }
