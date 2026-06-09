@@ -9,6 +9,10 @@ function Clientes() {
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
   const [clienteEditandoId, setClienteEditandoId] = useState(null);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const clientesPorPagina = 5;
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [busqueda, setBusqueda] = useState("");
 
   const cargarClientes = async () => {
     const respuesta = await fetch(`${API_URL}/Clientes`);
@@ -16,14 +20,25 @@ function Clientes() {
     setClientes(data);
   };
 
+  const limpiarFormulario = () => {
+  setClienteEditandoId(null);
+  setNombre("");
+  setPrimerApellido("");
+  setSegundoApellido("");
+  setEmail("");
+  setTelefono("");
+  setModalAbierto(false);
+};
+
   const seleccionarCliente = (cliente) => {
-    setClienteEditandoId(cliente.id);
-    setNombre(cliente.nombre);
-    setPrimerApellido(cliente.primerApellido);
-    setSegundoApellido(cliente.segundoApellido);
-    setEmail(cliente.email);
-    setTelefono(cliente.telefono);
-  };
+  setClienteEditandoId(cliente.id);
+  setNombre(cliente.nombre);
+  setPrimerApellido(cliente.primerApellido);
+  setSegundoApellido(cliente.segundoApellido);
+  setEmail(cliente.email);
+  setTelefono(cliente.telefono);
+  setModalAbierto(true);
+};
 
   const guardarCliente = async (e) => {
     e.preventDefault();
@@ -62,55 +77,106 @@ function Clientes() {
         : "Cliente registrado correctamente"
     );
 
-    setClienteEditandoId(null);
-    setNombre("");
-    setPrimerApellido("");
-    setSegundoApellido("");
-    setEmail("");
-    setTelefono("");
-
+    limpiarFormulario();
     cargarClientes();
   };
 
   const eliminarCliente = async (id) => {
-  const confirmar = confirm("¿Seguro que deseas eliminar este cliente?");
+    const confirmar = confirm("¿Seguro que deseas eliminar este cliente?");
 
-  if (!confirmar) {
-    return;
-  }
+    if (!confirmar) return;
 
-  const respuesta = await fetch(`${API_URL}/Clientes/${id}`, {
-    method: "DELETE",
-  });
+    const respuesta = await fetch(`${API_URL}/Clientes/${id}`, {
+      method: "DELETE",
+    });
 
-  if (!respuesta.ok) {
-    const data = await respuesta.text();
-    alert(data);
-    return;
-  }
+    if (!respuesta.ok) {
+      const data = await respuesta.text();
+      alert(data);
+      return;
+    }
 
-  alert("Cliente eliminado correctamente");
-  cargarClientes();
-};
+    alert("Cliente eliminado correctamente");
+    cargarClientes();
+  };
 
-  useEffect(() => {
-    const obtenerClientes = async () => {
-      await cargarClientes();
-    };
+useEffect(() => {
+  const obtenerClientes = async () => {
+    await cargarClientes();
+  };
 
-    obtenerClientes();
-  }, []);
+  obtenerClientes();
+}, []);
+
+const clientesFiltrados = clientes.filter((cliente) => {
+  const nombreCompleto = `${cliente.nombre} ${cliente.primerApellido} ${cliente.segundoApellido}`.toLowerCase();
 
   return (
-    <div>
-      <h2>Clientes</h2>
+    nombreCompleto.includes(busqueda.toLowerCase()) ||
+    cliente.email.toLowerCase().includes(busqueda.toLowerCase()) ||
+    cliente.telefono.includes(busqueda)
+  );
+});
 
-      <form onSubmit={guardarCliente}>
+const indiceUltimoCliente = paginaActual * clientesPorPagina;
+const indicePrimerCliente = indiceUltimoCliente - clientesPorPagina;
+
+const clientesPaginados = clientesFiltrados.slice(
+  indicePrimerCliente,
+  indiceUltimoCliente
+);
+
+const totalPaginas = Math.ceil(clientesFiltrados.length / clientesPorPagina);
+
+  return (
+    <div className="clientes-page">
+      <div className="clientes-header">
+  <div>
+    <h2>Gestión de clientes</h2>
+    <p>Registra, consulta, actualiza y elimina información de clientes.</p>
+  </div>
+
+  <div className="clientes-actions">
+  <input
+    type="text"
+    placeholder="Buscar por nombre, correo o teléfono"
+    value={busqueda}
+    onChange={(e) => {
+      setBusqueda(e.target.value);
+      setPaginaActual(1);
+    }}
+  />
+
+  <button
+    className="btn-primary"
+    onClick={() => {
+      limpiarFormulario();
+      setModalAbierto(true);
+    }}
+  >
+  Nuevo cliente
+  </button>
+</div>
+</div>
+
+      {modalAbierto && (
+  <div className="modal-overlay">
+    <div className="modal-card">
+      <div className="modal-header">
+        <h3>{clienteEditandoId ? "Editar cliente" : "Registrar cliente"}</h3>
+
+        <button className="modal-close" onClick={limpiarFormulario}>
+          ×
+        </button>
+      </div>
+
+      <form onSubmit={guardarCliente} className="clientes-form modal-form">
         <input
           type="text"
           placeholder="Nombre"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
+          required
         />
 
         <input
@@ -118,6 +184,7 @@ function Clientes() {
           placeholder="Primer apellido"
           value={primerApellido}
           onChange={(e) => setPrimerApellido(e.target.value)}
+          required
         />
 
         <input
@@ -129,9 +196,10 @@ function Clientes() {
 
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
@@ -139,51 +207,95 @@ function Clientes() {
           placeholder="Teléfono"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
+          required
         />
 
-        <button type="submit">
-          {clienteEditandoId ? "Actualizar cliente" : "Guardar cliente"}
-        </button>
+        <div className="modal-actions">
+          <button type="button" className="btn-secondary" onClick={limpiarFormulario}>
+            Cancelar
+          </button>
+
+          <button type="submit" className="btn-primary">
+            {clienteEditandoId ? "Actualizar cliente" : "Guardar cliente"}
+          </button>
+        </div>
       </form>
+    </div>
+  </div>
+)}
 
-      {clientes.length === 0 ? (
-        <p>No hay clientes registrados.</p>
-      ) : (
-        <table border="1">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Primer Apellido</th>
-              <th>Segundo Apellido</th>
-              <th>Correo Electrónico</th>
-              <th>Teléfono</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+      <section className="clientes-table-card">
+        <h3>Clientes registrados</h3>
 
-          <tbody>
-            {clientes.map((cliente) => (
-              <tr key={cliente.id}>
-                <td>{cliente.id}</td>
-                <td>{cliente.nombre}</td>
-                <td>{cliente.primerApellido}</td>
-                <td>{cliente.segundoApellido}</td>
-                <td>{cliente.email}</td>
-                <td>{cliente.telefono}</td>
-                <td>
-                  <button onClick={() => seleccionarCliente(cliente)}>
-                    Editar
-                  </button>
-                    <button onClick={() => eliminarCliente(cliente.id)}>
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+        {clientesFiltrados.length === 0 ? (
+          <p className="empty-message">No hay clientes registrados.</p>
+        ) : (
+          <div className="table-container">
+            <table className="clientes-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre completo</th>
+                  <th>Correo electrónico</th>
+                  <th>Teléfono</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {clientesPaginados.map((cliente) => (
+                  <tr key={cliente.id}>
+                    <td>{cliente.id}</td>
+                    <td>
+  {cliente.nombre} {cliente.primerApellido} {cliente.segundoApellido}
+                    </td>
+                    <td>{cliente.email}</td>
+                    <td>{cliente.telefono}</td>
+                    <td>
+                      <div className="table-actions">
+                        <button
+                          className="btn-edit"
+                          onClick={() => seleccionarCliente(cliente)}
+                        >
+                          Editar
+                        </button>
+
+                        <button
+                          className="btn-delete"
+                          onClick={() => eliminarCliente(cliente.id)}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="pagination">
+  <button
+    onClick={() => setPaginaActual(paginaActual - 1)}
+    disabled={paginaActual === 1}
+  >
+    Anterior
+  </button>
+
+  <span>
+    Página {paginaActual} de {totalPaginas}
+  </span>
+
+  <button
+    onClick={() => setPaginaActual(paginaActual + 1)}
+    disabled={paginaActual === totalPaginas}
+  >
+    Siguiente
+  </button>
+</div>
+
+          </div>
+        )}
+      </section>
     </div>
   );
 }

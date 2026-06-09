@@ -5,11 +5,10 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 
 function App() {
-
   const [pantalla, setPantalla] = useState("home");
 
   if (pantalla === "home") {
-  return <Home onLogin={() => setPantalla("login")} />;
+    return <Home onLogin={() => setPantalla("login")} />;
   }
 
   if (pantalla === "dashboard") {
@@ -18,22 +17,20 @@ function App() {
 
   if (pantalla === "registro") {
     return (
-      <>
-        <Registro />
-        <button onClick={() => setPantalla("login")}>
-          Ya tengo cuenta
-        </button>
-      </>
+      <Registro
+        onLogin={() => setPantalla("login")}
+        onHome={() => setPantalla("home")}
+      />
     );
   }
 
   return (
-  <Login
-    onLogin={() => setPantalla("dashboard")}
-    onRegistro={() => setPantalla("registro")}
-    onHome={() => setPantalla("home")}
-  />
-);
+    <Login
+      onLogin={() => setPantalla("dashboard")}
+      onRegistro={() => setPantalla("registro")}
+      onHome={() => setPantalla("home")}
+    />
+  );
 }
 
 export default App;
