@@ -1,5 +1,6 @@
 import { useState } from "react";
 import API_URL from "../services/api";
+import Swal from "sweetalert2";
 
 function Login({ onLogin , onRegistro , onHome }) {
   const [correo, setCorreo] = useState("");
@@ -28,7 +29,12 @@ if (!respuesta.ok) {
 
 localStorage.setItem("token", data);
 
-alert("Inicio de sesión correcto");
+await Swal.fire({
+  icon: "success",
+  title: "Cliente eliminado",
+  text: "El cliente fue eliminado correctamente.",
+  confirmButtonColor: "#2563eb",
+});
 onLogin();
 
   };

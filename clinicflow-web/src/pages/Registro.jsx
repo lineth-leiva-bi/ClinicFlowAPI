@@ -1,5 +1,6 @@
 import { useState } from "react";
 import API_URL from "../services/api";
+import Swal from "sweetalert2";
 
 function Registro({ onLogin, onHome }) {
   const [nombre, setNombre] = useState("");
@@ -42,7 +43,12 @@ function Registro({ onLogin, onHome }) {
       return;
     }
 
-    alert("Registro realizado correctamente");
+await Swal.fire({
+  icon: "success",
+  title: "Cuenta creada",
+  text: "Tu cuenta fue creada correctamente.",
+  confirmButtonColor: "#2563eb",
+});
     onLogin();
   };
 

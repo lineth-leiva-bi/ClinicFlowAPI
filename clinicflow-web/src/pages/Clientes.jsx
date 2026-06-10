@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API_URL from "../services/api";
+import Swal from "sweetalert2";
 
 function Clientes() {
   const [clientes, setClientes] = useState([]);
@@ -71,20 +72,33 @@ function Clientes() {
       return;
     }
 
-    alert(
-      clienteEditandoId
-        ? "Cliente actualizado correctamente"
-        : "Cliente registrado correctamente"
-    );
+    await Swal.fire({
+  icon: "success",
+  title: clienteEditandoId
+    ? "Cliente actualizado"
+    : "Cliente registrado",
+  text: clienteEditandoId
+    ? "Los datos del cliente fueron actualizados correctamente."
+    : "El cliente fue registrado correctamente.",
+  confirmButtonColor: "#2563eb",
+});
 
     limpiarFormulario();
     cargarClientes();
   };
 
-  const eliminarCliente = async (id) => {
-    const confirmar = confirm("¿Seguro que deseas eliminar este cliente?");
+  const confirmar = await Swal.fire({
+  icon: "warning",
+  title: "¿Deseas eliminar este cliente?",
+  text: "Esta acción no se puede deshacer.",
+  showCancelButton: true,
+  confirmButtonText: "Sí, eliminar",
+  cancelButtonText: "Cancelar",
+  confirmButtonColor: "#dc2626",
+  cancelButtonColor: "#6b7280",
+});
 
-    if (!confirmar) return;
+if (!confirmar.isConfirmed) return;
 
     const respuesta = await fetch(`${API_URL}/Clientes/${id}`, {
       method: "DELETE",
@@ -92,11 +106,21 @@ function Clientes() {
 
     if (!respuesta.ok) {
       const data = await respuesta.text();
-      alert(data);
+      Swal.fire({
+  icon: "error",
+  title: "Error",
+  text: data,
+  confirmButtonColor: "#2563eb",
+});
       return;
     }
 
-    alert("Cliente eliminado correctamente");
+    await Swal.fire({
+  icon: "success",
+  title: "Cliente eliminado",
+  text: "El cliente fue eliminado correctamente.",
+  confirmButtonColor: "#2563eb",
+});
     cargarClientes();
   };
 
