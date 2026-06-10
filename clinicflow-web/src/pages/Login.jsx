@@ -31,9 +31,10 @@ localStorage.setItem("token", data);
 
 await Swal.fire({
   icon: "success",
-  title: "Cliente eliminado",
-  text: "El cliente fue eliminado correctamente.",
-  confirmButtonColor: "#2563eb",
+  title: "Bienvenido",
+  text: "Inicio de sesión realizado correctamente.",
+  timer: 1500,
+  showConfirmButton: false,
 });
 onLogin();
 

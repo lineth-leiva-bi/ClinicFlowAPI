@@ -57,25 +57,42 @@ namespace ClinicFlowAPI.Controllers
             cliente.SegundoApellido = clienteActualizado.SegundoApellido;
             cliente.Email = clienteActualizado.Email;
             cliente.Telefono = clienteActualizado.Telefono;
+            cliente.Activo = clienteActualizado.Activo;
 
             await _context.SaveChangesAsync();
 
             return Ok(cliente);
         }
 
-        /// Elimina un cliente existente según el Id
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> EliminarCliente(int id)
+        /// Inactiva un cliente existente según el Id
+        [HttpPut("{id}/inactivar")]
+        public async Task<IActionResult> InactivarCliente(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
 
             if (cliente == null)
                 return NotFound("Cliente no encontrado.");
 
-            _context.Clientes.Remove(cliente);
+            cliente.Activo = false;
+
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Cliente inactivado correctamente.");
+        }
+
+        [HttpPut("{id}/activar")]
+        public async Task<IActionResult> ActivarCliente(int id)
+        {
+            var cliente = await _context.Clientes.FindAsync(id);
+
+            if (cliente == null)
+                return NotFound("Cliente no encontrado.");
+
+            cliente.Activo = true;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Cliente activado correctamente.");
         }
     }
 }

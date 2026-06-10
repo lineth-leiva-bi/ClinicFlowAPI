@@ -22,5 +22,7 @@ namespace ClinicFlowAPI.Models
         [Required]
         [Phone]
         public string Telefono { get; set; } = string.Empty;
+
+        public bool Activo { get; set; } = true;
     }
 }
