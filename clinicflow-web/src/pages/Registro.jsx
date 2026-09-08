@@ -14,19 +14,13 @@ function Registro({ onLogin, onHome }) {
     e.preventDefault();
 
     const nuevoUsuario = {
-      id: 0,
-      contrasena: contrasena,
-      rol: "Cliente",
-      clienteId: 0,
-      cliente: {
-        id: 0,
-        nombre: nombre,
-        primerApellido: primerApellido,
-        segundoApellido: segundoApellido,
-        email: email,
-        telefono: telefono,
-      },
-    };
+  nombre: nombre,
+  primerApellido: primerApellido,
+  segundoApellido: segundoApellido,
+  email: email,
+  telefono: telefono,
+  contrasenna: contrasena,
+};
 
     const respuesta = await fetch(`${API_URL}/Auth/Registrarme`, {
       method: "POST",

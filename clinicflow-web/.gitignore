@@ -20,5 +20,25 @@ dist-ssr
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.sw?
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Local configuration / secrets
+appsettings.Development.json
+secrets.json
+
+# Visual Studio
+.vs/
+
+# .NET build files
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo

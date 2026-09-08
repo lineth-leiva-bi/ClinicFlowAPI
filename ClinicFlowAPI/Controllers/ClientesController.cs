@@ -2,9 +2,11 @@
 using ClinicFlowAPI.Models;
 using ClinicFlowAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicFlowAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     //convierte la clase en API
     [ApiController] 
 

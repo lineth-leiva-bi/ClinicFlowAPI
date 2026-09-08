@@ -13,15 +13,13 @@ namespace ClinicFlowAPI.Models
         public DateTime FechaHora { get; set; }
 
         [Required]
-        public string Motivo { get; set; }
+        public string Motivo { get; set; } = string.Empty;
 
         public string Estado { get; set; } = "Pendiente";
 
-        //?puede ser null
         public string? Observaciones { get; set; }
 
         // Relación con Cliente
-        public Cliente Cliente { get; set; }
-
+        public Cliente Cliente { get; set; } = null!;
     }
 }

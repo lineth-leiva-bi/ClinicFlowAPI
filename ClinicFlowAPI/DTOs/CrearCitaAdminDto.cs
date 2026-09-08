@@ -2,13 +2,18 @@
 
 namespace ClinicFlowAPI.DTOs
 {
-    public class CrearCitaDto
+    public class CrearCitaAdminDto
     {
+        [Required]
+        public int ClienteId { get; set; }
+
         [Required]
         public DateTime FechaHora { get; set; }
 
         [Required]
         public string Motivo { get; set; } = string.Empty;
+
+        public string Estado { get; set; } = "Pendiente";
 
         public string? Observaciones { get; set; }
     }

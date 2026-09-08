@@ -24,23 +24,54 @@ namespace ClinicFlowAPI.Controllers
         //conexión con el token 
         private readonly IConfiguration _configuration;
 
-        public AuthController(AppDbContext context,IConfiguration configuration)
+        public AuthController(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
 
         [HttpPost("Registrarme")]
-        public async Task<IActionResult> Registrar(Usuario usuario)
+        public async Task<IActionResult> Registrar([FromBody] RegistroUsuarioDto dto)
         {
-            var passwordService = new SeguridadContrasenna();
+            var usuarioExiste = await _context.Usuarios
+                .AnyAsync(u => u.usuario == dto.Email);
 
-            usuario.contrasenna = passwordService.HashPassword(usuario.contrasenna);
+            if (usuarioExiste)
+                return BadRequest("El usuario ya existe.");
 
-            _context.Usuarios.Add(usuario);
+            var clienteExiste = await _context.Clientes
+                .AnyAsync(c => c.Email == dto.Email);
+
+            if (clienteExiste)
+                return BadRequest("Ya existe un cliente con este correo.");
+
+            var nuevoCliente = new Cliente
+            {
+                Nombre = dto.Nombre,
+                PrimerApellido = dto.PrimerApellido,
+                SegundoApellido = dto.SegundoApellido,
+                Email = dto.Email,
+                Telefono = dto.Telefono,
+                Activo = true
+            };
+
+            _context.Clientes.Add(nuevoCliente);
             await _context.SaveChangesAsync();
 
-            return Ok("Usuario registrado"); 
+            var passwordService = new SeguridadContrasenna();
+
+            var nuevoUsuario = new Usuario
+            {
+                usuario = dto.Email,
+                contrasenna = passwordService.HashPassword(dto.Contrasenna),
+                rol = "Cliente",
+                ClienteId = nuevoCliente.Id
+            };
+
+            _context.Usuarios.Add(nuevoUsuario);
+            await _context.SaveChangesAsync();
+
+            return Ok("Usuario registrado correctamente");
         }
 
         [HttpPost("login")]
@@ -55,7 +86,7 @@ namespace ClinicFlowAPI.Controllers
             var passwordService = new SeguridadContrasenna();
 
             var valido = passwordService.VerifyPassword(
-                usuarioactualizado.contrasenna, 
+                usuarioactualizado.contrasenna,
                 inicio.Contrasenna
             );
 

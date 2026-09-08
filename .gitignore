@@ -361,3 +361,19 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+# React / Vite
+clinicflow-web/dist/
+clinicflow-web/.env
+clinicflow-web/.env.*
+!clinicflow-web/.env.example
+
+# Local development configuration
+**/appsettings.Development.json
+
+# Local secrets
+**/secrets.json
+
+# Compressed project backups
+*.zip
