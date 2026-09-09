@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏥 ClinicFlow
+#ClinicFlow
 
 ### Sistema web Full Stack para gestión de clientes y citas clínicas
 
@@ -15,7 +15,7 @@ Aplicación desarrollada con **React + ASP.NET Core + SQL Server**, con autentic
 
 ---
 
-## ✨ Vista general
+##Vista general
 
 <p align="center">
   <img src="docs/images/clinicflow-home.png" alt="Página principal de ClinicFlow" width="850"/>
@@ -27,9 +27,9 @@ El sistema cuenta con dos perfiles de acceso: **Cliente** y **Administrador**, c
 
 ---
 
-## 📸 Funcionalidades por rol
+##Funcionalidades por rol
 
-### 👤 Portal del Cliente
+### Portal del Cliente
 
 El cliente puede consultar y administrar sus propias citas, manteniendo el acceso restringido a su información.
 
@@ -47,7 +47,7 @@ El cliente puede consultar y administrar sus propias citas, manteniendo el acces
 - Cancelación de citas.
 - Acceso restringido a sus propios registros.
 
-### 🛡️ Panel Administrativo
+###Panel Administrativo
 
 El administrador dispone de una interfaz diferenciada para gestionar la información general del sistema.
 
@@ -65,7 +65,7 @@ El administrador dispone de una interfaz diferenciada para gestionar la informac
 
 ---
 
-## 🧰 Stack tecnológico
+##Stack tecnológico
 
 | Área                     | Tecnologías                        |
 | ------------------------ | ---------------------------------- |
@@ -80,7 +80,7 @@ El administrador dispone de una interfaz diferenciada para gestionar la informac
 
 ---
 
-## 🏗️ Arquitectura
+##Arquitectura
 
 ```text
 ┌─────────────────────┐
@@ -118,7 +118,7 @@ ClinicFlowAPI/
 
 ---
 
-## 🔐 Autenticación y seguridad
+## Autenticación y seguridad
 
 ClinicFlow utiliza **JSON Web Tokens (JWT)** para autenticar usuarios y controlar el acceso a los recursos del sistema.
 
@@ -134,11 +134,11 @@ Entre las medidas implementadas se encuentran:
 - Validación de expiración del token.
 - Configuración sensible almacenada fuera del repositorio mediante User Secrets.
 
-> 🔒 Las claves JWT y cadenas de conexión reales no se almacenan en el código fuente.
+> Las claves JWT y cadenas de conexión reales no se almacenan en el código fuente.
 
 ---
 
-## 👥 Control de acceso
+##  Control de acceso
 
 | Funcionalidad             | Cliente | Admin |
 | ------------------------- | :-----: | :---: |
@@ -151,7 +151,7 @@ Entre las medidas implementadas se encuentran:
 
 ---
 
-## ⚙️ Ejecución local
+## Ejecución local
 
 ### Backend
 
@@ -202,7 +202,7 @@ src/services/api.js
 
 ---
 
-## 🎯 Objetivo del proyecto
+## Objetivo del proyecto
 
 ClinicFlow fue desarrollado como proyecto de portafolio para aplicar conocimientos de desarrollo **Full Stack** en un escenario funcional, incluyendo:
 
@@ -220,7 +220,7 @@ ClinicFlow fue desarrollado como proyecto de portafolio para aplicar conocimient
 
 <div align="center">
 
-### 💻 Proyecto de portafolio Full Stack
+###  Proyecto de portafolio Full Stack
 
 **React · ASP.NET Core · SQL Server · JWT**
 
